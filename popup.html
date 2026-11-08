@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TejoERP Contact Extractor</title>
+<style>
+:root{--navy:#17134d;--teal:#16b9d4;--green:#0b8f55;--green2:#12a96a;--muted:#6b7280;--line:#e5eaf0;--bg:#f5f8fb}
+*{box-sizing:border-box}
+body{margin:0;width:390px;background:var(--bg);font:13px/1.4 Inter,Arial,sans-serif;color:#172033}
+.shell{padding:14px}
+.header{background:linear-gradient(115deg,#111044,#191755 65%,#0d5267);border-radius:15px;padding:13px 14px 12px;color:white;box-shadow:0 5px 16px #17134d22}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img{width:120px;height:auto;max-height:36px;object-fit:contain;object-position:left center;background:#fff;border-radius:5px;padding:3px 5px}
+.brand-mark{margin-left:auto;width:36px;height:36px;border-radius:11px;background:#ffffff16;display:grid;place-items:center}
+.brand-mark img{width:29px;height:29px;object-fit:contain;background:transparent;padding:0}
+h1{font-size:16px;line-height:1.15;margin:12px 0 3px;font-weight:750;letter-spacing:-.2px}
+.subtitle{font-size:11px;color:#d7e9f3}
+.group-card{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px;box-shadow:0 3px 10px #17203308}
+.group-row{display:flex;align-items:center;gap:10px}
+.group-icon{width:36px;height:36px;border-radius:11px;background:#e7f8f3;color:var(--green);display:grid;place-items:center;flex:0 0 auto}
+.group-icon svg{width:20px;height:20px}
+.group-meta{min-width:0;flex:1}
+.eyebrow{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.65px}
+.group-name{font-size:13px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.group-members{font-size:11px;color:var(--muted);margin-top:1px}
+.status-pill{font-size:10px;font-weight:700;border-radius:20px;padding:4px 8px;background:#eef2f7;color:#64748b;white-space:nowrap}
+.status-pill.ready{background:#e5f8ef;color:#087c4a}
+.status-pill.busy{background:#fff5df;color:#9a6500}
+.primary{width:100%;border:0;border-radius:10px;background:linear-gradient(100deg,#078449,#0ba45f);color:#fff;font-weight:750;font-size:13px;padding:12px 13px;margin-top:12px;cursor:pointer;box-shadow:0 3px 8px #07844925;display:flex;align-items:center;justify-content:center;gap:9px}
+.primary:hover{filter:brightness(1.04)}
+.primary:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+.secondary{width:100%;border:1px solid #d7dee8;background:#fff;color:#1e293b;border-radius:10px;font-size:12px;font-weight:700;padding:10px;margin-top:8px;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px}
+.secondary:disabled{color:#a0a8b5;background:#f7f8fa;cursor:not-allowed}
+.btn-icon{width:16px;height:16px;display:inline-block}
+.progress-card{margin-top:11px;border:1px solid #ccefe0;background:#f0fbf6;border-radius:11px;padding:11px;display:none}
+.progress-top{display:flex;justify-content:space-between;align-items:center;font-weight:750;font-size:12px}
+.progress-top span:last-child{color:#087c4a}
+.progress-track{height:8px;background:#dceee6;border-radius:9px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#08a65e,#25c58a);border-radius:9px;transition:width .2s}
+.progress-note{font-size:10px;color:#5e746a;margin-top:6px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}
+.stat{background:#f7f9fc;border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;align-items:center;gap:8px}
+.stat-icon{width:28px;height:28px;border-radius:9px;background:#e8f7f1;color:#078449;display:grid;place-items:center;flex:0 0 auto}
+.stat-icon svg{width:16px;height:16px}
+.stat-value{font-size:17px;line-height:1.05;font-weight:800;color:#111827}
+.stat-label{font-size:10px;color:#64748b;margin-top:3px}
+.message{margin-top:10px;background:#eef6ff;border:1px solid #dcecff;border-radius:9px;padding:9px 10px;color:#335b83;font-size:10px;display:flex;gap:8px;align-items:flex-start}
+.message svg{width:15px;height:15px;flex:0 0 auto;margin-top:1px}
+.footer{display:flex;justify-content:space-between;align-items:center;color:#8993a2;font-size:9px;padding:11px 2px 0}
+.footer strong{color:#4e5870;font-weight:750}
+.hidden{display:none!important}
+.error{margin-top:9px;color:#a33b32;background:#fff0ef;border:1px solid #ffd7d2;padding:8px 9px;border-radius:8px;font-size:10px}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="header">
+    <div class="brand">
+      <img src="assets/tejoerp-wordmark.png" alt="TejoERP">
+      <div class="brand-mark"><img src="icons/icon48.png" alt=""></div>
+    </div>
+    <h1>WhatsApp Group Contact Extractor</h1>
+    <div class="subtitle">Extract available participant contacts • Export CSV</div>
+  </header>
+
+  <section class="group-card">
+    <div class="group-row">
+      <div class="group-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c.5-3.2 2.7-5 6.2-5s5.7 1.8 6.2 5"/><path d="M16 5.2a3 3 0 0 1 0 5.7M17 14c2.4.5 3.7 2.1 4.1 4.4"/></svg>
+      </div>
+      <div class="group-meta">
+        <div class="eyebrow">Selected WhatsApp group</div>
+        <div class="group-name" id="groupName">Open a group to begin</div>
+        <div class="group-members" id="groupMembers">Group information will appear here</div>
+      </div>
+      <span class="status-pill" id="statePill">Ready</span>
+    </div>
+
+    <button class="primary" id="extractBtn">
+      <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v3h16v-3"/></svg>
+      <span id="extractLabel">Extract Contacts</span>
+    </button>
+    <button class="secondary" id="exportBtn" disabled>
+      <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v3h16v-3"/></svg>
+      Export Last Result (CSV)
+    </button>
+
+    <div class="progress-card" id="progressCard">
+      <div class="progress-top"><span id="progressTitle">Scanning participants…</span><span id="progressPercent">0%</span></div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-note" id="progressNote">Reading the Search members list only.</div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 20v-1.5a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4V20"/><circle cx="9" cy="7" r="4"/><path d="M20 8v6m-3-3h6"/></svg></div>
+        <div><div class="stat-value" id="contactsValue">—</div><div class="stat-label">Contacts found</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+        <div><div class="stat-value" id="membersValue">—</div><div class="stat-label">Members scanned</div></div>
+      </div>
+    </div>
+
+    <div class="message" id="helpMessage">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/></svg>
+      <span>Open the group's info panel in WhatsApp Web, then click <strong>Extract Contacts</strong>. The extension opens and scans the participant list.</span>
+    </div>
+    <div class="error hidden" id="errorBox"></div>
+  </section>
+
+  <footer class="footer"><span><strong>TEJOERP</strong> · ExpandX Solutions</span><span>Runs locally in your browser</span></footer>
+</div>
+<script src="popup.js"></script>
+</body>
+</html>
